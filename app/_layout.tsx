@@ -7,16 +7,12 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { SQLiteProvider, openDatabaseSync } from 'expo-sqlite';
-import { useDrizzleStudio } from 'expo-drizzle-studio-plugin';
+import { SQLiteProvider } from 'expo-sqlite';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const db = openDatabaseSync("gymApp.db");
-
 export default function RootLayout() {
-  useDrizzleStudio(db);
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -34,7 +30,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SQLiteProvider databaseName="gym.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
+      <SQLiteProvider databaseName="gyma.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
