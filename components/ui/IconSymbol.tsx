@@ -19,14 +19,16 @@ export function IconSymbol({
   size = 24,
   color,
   style,
+  weight,
 }: {
   name: IconSymbolName;
   size?: number;
   color: string | OpaqueColorValue;
   style?: StyleProp<ViewStyle>;
+  weight?: 'light' | 'medium' | 'bold';
 }) {
   const IconComponent = ICON_MAP[name].component;
   const iconName = ICON_MAP[name].name;
 
-  return <IconComponent name={iconName} size={size} color={color} style={style} />;
+  return <IconComponent name={iconName} size={size} color={color} style={style} weight={weight} />;
 }
