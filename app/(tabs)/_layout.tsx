@@ -7,9 +7,16 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import * as Localization from 'expo-localization';
+import { I18n } from 'i18n-js';
+import { translations } from '@/services/localization';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  let [locale, setLocale] = React.useState(Localization.getLocales()[0].languageCode);
+  const i18n = new I18n(translations);
+  if (locale !== null)
+    i18n.locale = locale;
 
   return (
     <Tabs
@@ -29,21 +36,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: i18n.t('home'),
           tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="exercises"
         options={{
-          title: 'Exercises',
+          title: i18n.t('exercises'),
           tabBarIcon: ({ color }) => <IconSymbol size={24} name="dumbbell.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="progress"
         options={{
-          title: 'Progress',
+          title: i18n.t('progress'),
           tabBarIcon: ({ color }) => <IconSymbol size={24} name="autograph.fill" color={color} />,
         }}
       />
