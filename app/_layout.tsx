@@ -30,7 +30,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <SQLiteProvider databaseName="gyma.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
+      <SQLiteProvider databaseName="gym.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

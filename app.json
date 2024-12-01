@@ -4,6 +4,7 @@
       "assets/*"
     ],
     "name": "gymfella",
+    "displayName": "Gym Fella",
     "slug": "gymfella",
     "version": "1.0.0",
     "orientation": "portrait",

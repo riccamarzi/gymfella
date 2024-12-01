@@ -47,12 +47,46 @@ CREATE TABLE IF NOT EXISTS locales (
 )
 ''')
 
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS workouts (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    start DATE NOT NULL,
+    duration INTEGER NOT NULL,
+    name TEXT NOT NULL
+)
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS workout_exercises (
+    workout_id INTEGER NOT NULL,
+    exercise_id INTEGER NOT NULL,
+    sets INTEGER NOT NULL,
+    reps INTEGER NOT NULL,
+    PRIMARY KEY (workout_id, exercise_id),
+    FOREIGN KEY (workout_id) REFERENCES workouts(id),
+    FOREIGN KEY (exercise_id) REFERENCES exercises(id)
+)
+''')
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS exercise_progress (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    exercise_id INTEGER NOT NULL,
+    weight FLOAT(3,2) NOT NULL,
+    date DATE NOT NULL,
+    FOREIGN KEY (exercise_id) REFERENCES exercises(id)
+)
+''')
+
 # Inserimento dei dati nella tabella exercises senza specificare l'ID
 exercises = [
     (1,),
     (2,),
     (2,),
     (3,),
+    (6,),
+    (5,),
+    (4,)
 ]
 
 cursor.executemany('''
@@ -61,13 +95,13 @@ INSERT INTO exercises (muscle_group_id) VALUES (?)
 
 # Inserimento dei dati nella tabella muscle_groups
 muscle_groups = [
-    (1,),
-    (2,),
-    (3,),
-    (4,),
-    (5,),
-    (6,),
-    (7,)
+    (1,), # Chest
+    (2,), # Legs
+    (3,), # Biceps
+    (4,), # Triceps
+    (5,), # Shoulders
+    (6,), # Back
+    (7,)  # Abs
 ]
 
 cursor.executemany('''
@@ -87,13 +121,19 @@ INSERT INTO locales (id) VALUES (?)
 # Inserimento dei dati nella tabella exercise_translations
 exercise_translations = [
     (1, 'en', 'Push-up'),
-    (1, 'it', 'Flessione'),
+    (1, 'it', 'Piegamenti'),
     (2, 'en', 'Squat'),
-    (2, 'it', 'Accosciata'),
+    (2, 'it', 'Squat'),
     (3, 'en', 'Lunge'),
-    (3, 'it', 'Affondo'),
+    (3, 'it', 'Affondi'),
     (4, 'en', 'Biceps curl'),
     (4, 'it', 'Curl bicipiti'),
+    (5, 'en', 'Pull up'),
+    (5, 'it', 'Trazioni'),
+    (6, 'en', 'Shoulder press'),
+    (6, 'it', 'Alzate laterali'),
+    (7, 'en', 'Rope push-down'),
+    (7, 'it', 'Push-down corda')
 ]
 
 cursor.executemany('''

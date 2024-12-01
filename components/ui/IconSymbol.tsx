@@ -12,6 +12,7 @@ const ICON_MAP = {
   'chevron.left.forwardslash.chevron.right': { component: MaterialIcons, name: 'code' },
   'chevron.right': { component: MaterialIcons, name: 'chevron-right' },
   'calendar.fill': { component: MaterialCommunityIcons, name: 'calendar-check' },
+  'calendar.plus': { component: MaterialCommunityIcons, name: 'calendar-plus' },
 };
 
 export type IconSymbolName = keyof typeof ICON_MAP;
