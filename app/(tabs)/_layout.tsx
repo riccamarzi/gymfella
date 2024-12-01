@@ -41,6 +41,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="workouts"
+        options={{
+          title: i18n.t('workouts'),
+          tabBarIcon: ({ color }) => <IconSymbol size={24} name="calendar.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="exercises"
         options={{
           title: i18n.t('exercises'),

@@ -2,6 +2,7 @@ import React from 'react';
 import { OpaqueColorValue, StyleProp, ViewStyle } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome6';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ICON_MAP = {
   'house.fill': { component: MaterialIcons, name: 'home' },
@@ -10,6 +11,7 @@ const ICON_MAP = {
   'paperplane.fill': { component: FontAwesome, name: 'send' },
   'chevron.left.forwardslash.chevron.right': { component: MaterialIcons, name: 'code' },
   'chevron.right': { component: MaterialIcons, name: 'chevron-right' },
+  'calendar.fill': { component: MaterialCommunityIcons, name: 'calendar-check' },
 };
 
 export type IconSymbolName = keyof typeof ICON_MAP;
