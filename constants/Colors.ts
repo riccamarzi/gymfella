@@ -5,7 +5,7 @@ export const Colors = {
   light: {
     text: '#11181C',
     background: '#fff',
-    darkerBackground: '#f8f8f8',
+    lighterBackground: '#f8f8f8',
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',

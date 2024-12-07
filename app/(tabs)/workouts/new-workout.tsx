@@ -1,9 +1,6 @@
 import { Stack } from "expo-router";
 import React, { useState } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
-import * as Localization from 'expo-localization';
-import { translations } from "@/services/localization";
-import { I18n } from "i18n-js";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
@@ -11,19 +8,17 @@ import { StyleSheet } from "react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { DateTimePickerAndroid, DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import DateTimePicker, { AndroidNativeProps } from '@react-native-community/datetimepicker';
+import useTranslations from "@/hooks/useTranslations";
 
 
 export default function NewWorkout() {
-    const [locale, setLocale] = useState<string>(Localization.getLocales()[0].languageCode || 'en');
-    const i18n = new I18n(translations);
-    if (locale !== null)
-        i18n.locale = locale;
-
+    const { t } = useTranslations();
+    
+    const themeColors = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
     const [name, setName] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [duration, setDuration] = useState("0");
 
-    const themeColors = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
 
     const handleSave = () => {
         console.log('Save workout');
@@ -53,30 +48,30 @@ export default function NewWorkout() {
                 flex: 1,
             }}
         >
-            <Stack.Screen options={{ title: i18n.t('newWorkout') }} />
+            <Stack.Screen options={{ title: t('newWorkout') }} />
             <ThemedText 
                 style={styles.label}
-                darkColor={Colors.dark.text}    
-            >{i18n.t('workoutNameLabel')}</ThemedText>
+                darkColor={themeColors.text}    
+            >{t('workoutNameLabel')}</ThemedText>
             <TextInput
                 style={styles.input}
                 value={name}
                 onChangeText={setName}
-                placeholder={i18n.t('workoutNamePlaceholder')}
+                placeholder={t('workoutNamePlaceholder')}
             />
-            <ThemedText style={styles.label}>{i18n.t('startDateLabel')}</ThemedText>
+            <ThemedText style={styles.label}>{t('startDateLabel')}</ThemedText>
             <TextInput
                 style={styles.input}
                 value={startDate.toLocaleDateString()}
                 onFocus={() => showDatePicker()}
-                placeholder={i18n.t('startDateLabel')}
+                placeholder={t('startDateLabel')}
             />
-            <ThemedText style={styles.label}>{i18n.t('durationLabel')}</ThemedText>
+            <ThemedText style={styles.label}>{t('durationLabel')}</ThemedText>
             <TextInput
                 style={styles.input}
                 value={duration}
                 onChangeText={setDuration}
-                placeholder={i18n.t('durationLabel')}
+                placeholder={t('durationLabel')}
                 keyboardType="numeric"
             />
             <Pressable onPress={handleSave}>
@@ -91,7 +86,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: Colors.light.background, // O Colors.dark.background a seconda del tema
+        backgroundColor: themeColors.background, // O Colors.dark.background a seconda del tema
     },
     label: {
         fontSize: 16,
@@ -99,11 +94,11 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: Colors.light.icon, // O Colors.dark.icon a seconda del tema
+        borderColor: themeColors.icon, // O Colors.dark.icon a seconda del tema
         borderWidth: 1,
         borderRadius: 4,
         paddingHorizontal: 8,
         marginBottom: 16,
-        backgroundColor: Colors.light.darkerBackground, // O Colors.dark.lighterBackground a seconda del tema
+        backgroundColor: themeColors.lighterBackground, // O Colors.dark.lighterBackground a seconda del tema
     },
 });

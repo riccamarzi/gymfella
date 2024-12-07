@@ -1,6 +1,5 @@
 import React, { useState, PropsWithChildren, useRef, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, View, useAnimatedValue, LayoutChangeEvent, LayoutAnimation, Platform, UIManager } from 'react-native';
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { ThemedText } from '@/components/ThemedText'; // Assicurati di importare i tuoi componenti tematici
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { ThemedView } from '@/components/ThemedView';

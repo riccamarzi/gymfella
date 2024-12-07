@@ -1,7 +1,5 @@
-import { Exercise } from "@/interfaces/Exercise";
-import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { View } from "react-native";
 import * as Localization from 'expo-localization';
 import MuscleGroupList from "@/components/exercises/MuscleGroupList";
 
