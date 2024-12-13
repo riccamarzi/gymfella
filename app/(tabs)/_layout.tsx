@@ -1,22 +1,23 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import useTranslations from '@/hooks/useTranslations';
+import { useTheme } from 'react-native-paper';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const theme = useTheme();
   const { t } = useTranslations();
-
+  
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: theme.colors.primary,
         headerShown: true,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
