@@ -1,4 +1,4 @@
-import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme, ThemeProvider, Theme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -18,7 +18,13 @@ const customDarkTheme = {
   colors: {
     ...PaperDarkTheme.colors,
   },
-
+  fonts: {
+    ...PaperDarkTheme.fonts,
+    regular: { fontFamily: 'Roboto', fontWeight: '400' as '400', fontSize: 14 },
+    medium: { fontFamily: 'Roboto', fontWeight: '500' as '500', fontSize: 14 },
+    bold: { fontFamily: 'Roboto', fontWeight: '700' as '700', fontSize: 14 },
+    heavy: { fontFamily: 'Roboto', fontWeight: '900' as '900', fontSize: 14 },
+  },
 };
 
 const customDefaultTheme = {
@@ -26,7 +32,13 @@ const customDefaultTheme = {
   colors: {
     ...PaperDefaultTheme.colors,
   },
-
+  fonts: {
+    ...PaperDefaultTheme.fonts,
+    regular: { fontFamily: 'Roboto', fontWeight: '400' as "400", fontSize: 14 },
+    medium: { fontFamily: 'Roboto', fontWeight: '500' as "500", fontSize: 14 },
+    bold: { fontFamily: 'Roboto', fontWeight: '700' as "700", fontSize: 14 },
+    heavy: { fontFamily: 'Roboto', fontWeight: '900' as "900", fontSize: 14 },
+  },
 };
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
@@ -53,8 +65,7 @@ export default function RootLayout() {
     return null;
   }
 
-  const theme = colorScheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme;
-  console.log(theme.colors);
+  const theme: Theme = colorScheme === 'dark' ? CombinedDarkTheme : CombinedDefaultTheme;
   
 
   return (

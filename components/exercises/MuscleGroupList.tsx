@@ -8,6 +8,7 @@ import { Collapsible } from '@/components/exercises/Collapsible';
 
 interface MuscleGroupListProps {
   locale: string;
+  showCheckbox?: boolean;
 }
 
 interface MuscleGroup {
@@ -15,7 +16,7 @@ interface MuscleGroup {
     id: number;
 }
 
-const MuscleGroupList: React.FC<MuscleGroupListProps> = ({ locale }) => {
+const MuscleGroupList: React.FC<MuscleGroupListProps> = ({ locale, showCheckbox = false }) => {
   const [muscleGroups, setMuscleGroups] = useState([] as MuscleGroup[]);
   const [exercises, setExercises] = useState<{ [key: number]: Exercise[] }>({});
   const db = useSQLiteContext();
@@ -57,7 +58,7 @@ const MuscleGroupList: React.FC<MuscleGroupListProps> = ({ locale }) => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
             <Collapsible title={item.name}  >
-                <ExerciseList exercises={exercises[item.id] || []} />
+                <ExerciseList exercises={exercises[item.id] || []} showCheckbox={showCheckbox} />
             </Collapsible>
         )}
       />

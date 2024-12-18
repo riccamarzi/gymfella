@@ -62,10 +62,10 @@ export default function WorkoutsScreen() {
                         >{t('emptyWorkouts')}</ThemedText>
                     </ThemedView>
                 )}
-                        <Pressable onPress={() => console.log('pressed')} 
-                            style={[styles.link, {backgroundColor: theme.tint}]}
-                        >
-                    <Link href="/workouts/new-workout" style={styles.fab}>
+                    <Pressable onPress={() => console.log('pressed')} 
+                        style={[styles.link, {backgroundColor: theme.tint}]}
+                    >
+                        <Link href="/workouts/new-workout" style={styles.fab}>
                             <IconSymbol
                                 name="calendar.plus"
                                 size={32}
@@ -73,7 +73,7 @@ export default function WorkoutsScreen() {
                                 color={theme.icon}
                             />
                         </Link>
-                        </Pressable>
+                    </Pressable>
                 </ThemedView>
             </GestureHandlerRootView>
         </>

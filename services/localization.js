@@ -10,6 +10,8 @@ const translations = {
         workoutNamePlaceholder: "Chest - Biceps",
         startDateLabel: "Start date",
         durationLabel: "Duration (weeks)",
+        addExercise: "Add exercise",
+        selectExercise: "Select exercise",
     },
     it: {
         home: "Home",
@@ -22,6 +24,8 @@ const translations = {
         workoutNamePlaceholder: "Petto - Bicipiti",
         startDateLabel: "Data di inizio",
         durationLabel: "Durata (settimane)",
+        addExercise: "Aggiungi esercizio",
+        selectExercise: "Seleziona esercizi",
     },
 };
 
