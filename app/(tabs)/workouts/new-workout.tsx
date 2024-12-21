@@ -1,5 +1,5 @@
-import { Link, router, Stack } from "expo-router";
-import React, { useState } from "react";
+import { Link, Stack } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Text, Pressable, View } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
 import { TextInput, useTheme } from "react-native-paper";
@@ -11,6 +11,7 @@ import useTranslations from "@/hooks/useTranslations";
 import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import WorkoutExercises from "@/components/exercises/WorkoutExercises";
 import { WorkoutExercise } from "@/interfaces/WorkoutExercise";
+import { useSelectedExercises } from "@/providers/selectedExercisesProvider";
 
 export default function NewWorkout() {
     const themeColors = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
@@ -21,8 +22,23 @@ export default function NewWorkout() {
     const [startDate, setStartDate] = useState(new Date());
     const [duration, setDuration] = useState("4");
 
-    const [availableExercises, setAvailableExercises] = useState([] as WorkoutExercise[]);
-    const [selectedExercises, setSelectedExercises] = useState([] as WorkoutExercise[]);
+    const {selectedExercises, setSelectedExercises} = useSelectedExercises();
+    const [workoutExercises, setWorkoutExercises] = useState([] as WorkoutExercise[]);
+
+    useEffect(() => {
+        setSelectedExercises([]);
+    }, []);
+
+    useEffect(() => {
+        const newWorkoutExercises: WorkoutExercise[] = selectedExercises.map((exercise) => {
+            return {
+                ...exercise,
+                sets: '0',
+                reps: '0',
+            }
+        });
+        setWorkoutExercises(newWorkoutExercises);
+    }, [selectedExercises]);
 
     const handleSave = () => {
         console.log('Save workout');
@@ -79,15 +95,15 @@ export default function NewWorkout() {
     };
 
     const handleSetsChange = (index: number, value: string) => {
-        const newExercises = [...selectedExercises];
+        const newExercises = [...workoutExercises];
         newExercises[index].sets = value;
-        setSelectedExercises(newExercises);
+        setWorkoutExercises(newExercises);
     }
 
     const handleRepsChange = (index: number, value: string) => {
-        const newExercises = [...selectedExercises];
+        const newExercises = [...workoutExercises];
         newExercises[index].reps = value;
-        setSelectedExercises(newExercises);
+        setWorkoutExercises(newExercises);
     }
 
     return (
@@ -125,14 +141,15 @@ export default function NewWorkout() {
                     keyboardType="numeric"
                 />
             </View>
-            <WorkoutExercises selectedExercises={selectedExercises} handleSetsChange={handleSetsChange} handleRepsChange={handleRepsChange} />
-            {/* <Pressable style={{ backgroundColor: "red" }}> */}
+            <WorkoutExercises selectedExercises={workoutExercises} handleSetsChange={handleSetsChange} handleRepsChange={handleRepsChange} />
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                <Link href="/(tabs)/workouts/select-exercise" style={styles.link}>
+                <Link href={{
+                        pathname: '/(tabs)/workouts/select/[selectExercise]',
+                        params: { selectExercise: name }
+                    }} style={styles.link}>
                     <Text>{t("addExercise")}</Text>
                 </Link>
             </View>
-            {/* </Pressable> */}
             <Pressable onPress={handleSave}>
                 <Text>Salva</Text>
             </Pressable>

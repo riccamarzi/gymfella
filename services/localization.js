@@ -11,7 +11,10 @@ const translations = {
         startDateLabel: "Start date",
         durationLabel: "Duration (weeks)",
         addExercise: "Add exercise",
-        selectExercise: "Select exercise",
+        selectExercise: "Select exercises for",
+        exerciseName: "Exercise",
+        sets: "Sets",
+        reps: "Reps",
     },
     it: {
         home: "Home",
@@ -25,7 +28,10 @@ const translations = {
         startDateLabel: "Data di inizio",
         durationLabel: "Durata (settimane)",
         addExercise: "Aggiungi esercizio",
-        selectExercise: "Seleziona esercizi",
+        selectExercise: "Seleziona esercizi per",
+        exerciseName: "Esercizio",
+        sets: "Serie",
+        reps: "Ripetizioni",
     },
 };
 

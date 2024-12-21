@@ -1,15 +1,16 @@
 import React from 'react';
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { GestureHandlerRootView, Pressable, TouchableOpacity } from "react-native-gesture-handler";
+import { GestureHandlerRootView, Pressable } from "react-native-gesture-handler";
 import { StyleSheet, View, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import useTranslations from "@/hooks/useTranslations";
+import { FAB, Icon, useTheme } from 'react-native-paper';
 
 interface Workout {
     id: number;
@@ -21,7 +22,12 @@ export default function WorkoutsScreen() {
     const [workouts, setWorkouts] = useState([] as Workout[]);
     const { t } = useTranslations();
     const db = useSQLiteContext();
-    const theme = useColorScheme() === 'dark' ? Colors.dark : Colors.light;
+    const theme = useTheme();
+    const router = useRouter();
+
+    const handleCalendarPress = () => {
+        router.push(`/(tabs)/workouts/new-workout`);
+    }
 
     useEffect(() => {
         async function getWorkouts() {
@@ -62,7 +68,7 @@ export default function WorkoutsScreen() {
                         >{t('emptyWorkouts')}</ThemedText>
                     </ThemedView>
                 )}
-                    <Pressable onPress={() => console.log('pressed')} 
+                    {/* <Pressable onPress={() => console.log('pressed')} 
                         style={[styles.link, {backgroundColor: theme.tint}]}
                     >
                         <Link href="/workouts/new-workout" style={styles.fab}>
@@ -70,10 +76,20 @@ export default function WorkoutsScreen() {
                                 name="calendar.plus"
                                 size={32}
                                 weight="medium"
-                                color={theme.icon}
+                                color={theme.colors.}
                             />
                         </Link>
-                    </Pressable>
+                    </Pressable> */}
+                    <FAB
+                        icon="calendar-plus"
+                        style={[styles.link]}
+                        animated={false} 
+                        variant='primary'
+                        theme={theme}
+                        rippleColor={theme.colors.primary}
+                        onPress={handleCalendarPress}
+                    >
+                    </FAB>
                 </ThemedView>
             </GestureHandlerRootView>
         </>
@@ -97,8 +113,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 5, // Aggiunge ombra su Android
-        shadowColor: '#000', // Aggiunge ombra su iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
@@ -107,7 +121,6 @@ const styles = StyleSheet.create({
         borderRadius: 30, // Assicura che il Pressable sia circolare
     },
     fabText: {
-        color: 'red',
         fontSize: 24,
     },
 });

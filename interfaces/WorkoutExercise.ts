@@ -1,6 +1,6 @@
 export interface WorkoutExercise {
-    id: number;
-    name: string;
+    ex_id: number;
+    exercise_name: string;
     sets: string;
     reps: string;
 }

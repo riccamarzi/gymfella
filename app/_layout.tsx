@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { SQLiteProvider } from 'expo-sqlite';
 import { Provider as PaperProvider, MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperDefaultTheme, adaptNavigationTheme } from 'react-native-paper';
 import merge from 'deepmerge';
+import { SelectedExercisesProvider } from '@/providers/selectedExercisesProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -73,10 +74,12 @@ export default function RootLayout() {
       <ThemeProvider value={theme}>
 
         <SQLiteProvider databaseName="gym.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
+          <SelectedExercisesProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </SelectedExercisesProvider>
         </SQLiteProvider>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
       </ThemeProvider>

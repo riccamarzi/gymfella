@@ -23,7 +23,7 @@ export default function WorkoutExercises({ selectedExercises, handleSetsChange, 
                     </View>
                     {selectedExercises.map((exercise, index) => (
                         <View key={index} style={styles.tableRow}>
-                            <Text style={styles.tableCell}>{exercise.name}</Text>
+                            <Text style={styles.tableCell}>{exercise.exercise_name}</Text>
                             <TextInput
                                 style={styles.tableInput}
                                 value={exercise.sets}
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     },
     tableCell: {
         flex: 1,
+        color: '#333',
         textAlign: 'center',
     },
     tableInput: {

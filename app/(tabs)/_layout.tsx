@@ -4,13 +4,10 @@ import { Platform } from 'react-native';
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import useTranslations from '@/hooks/useTranslations';
 import { useTheme } from 'react-native-paper';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const theme = useTheme();
   const { t } = useTranslations();
   
@@ -41,13 +38,6 @@ export default function TabLayout() {
         options={{
           title: t('workouts'),
           tabBarIcon: ({ color }) => <IconSymbol size={24} name="calendar.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="exercises"
-        options={{
-          title: t('exercises'),
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="dumbbell.fill" color={color} />,
         }}
       />
       <Tabs.Screen
