@@ -1,7 +1,8 @@
 import sqlite3
-
+import os
 # Connessione al database SQLite
-conn = sqlite3.connect('C:\\Users\\ricca\\Documents\\GymFella\\gymfella\\assets\\gymApp.db')
+cwd = os.path.dirname(os.path.abspath(__file__))
+conn = sqlite3.connect(os.path.join(cwd, 'gymApp.db'))  
 cursor = conn.cursor()
 
 # Creazione delle tabelle
