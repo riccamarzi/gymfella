@@ -6,6 +6,8 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import useTranslations from '@/hooks/useTranslations';
 import { useTheme } from 'react-native-paper';
+import TabBar from '@/components/ui/TabBar';
+import TabsHeader from '@/components/ui/TabsHeader';
 
 export default function TabLayout() {
   const theme = useTheme();
@@ -13,9 +15,12 @@ export default function TabLayout() {
   
   return (
     <Tabs
+      
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
         headerShown: true,
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
