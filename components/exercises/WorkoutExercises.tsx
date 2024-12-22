@@ -1,52 +1,65 @@
 import useTranslations from "@/hooks/useTranslations";
 import { WorkoutExercise } from "@/interfaces/WorkoutExercise";
-import { View, Text, StyleSheet } from "react-native";
-import { TextInput } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { DataTable, IconButton, TextInput } from "react-native-paper";
 
 interface WorkoutExercisesProps {
-    selectedExercises: WorkoutExercise[];
+    workoutExercises: WorkoutExercise[];
     handleSetsChange: (index: number, text: string) => void;
     handleRepsChange: (index: number, text: string) => void;
+    handleDeletePress: (exercise: WorkoutExercise) => void;
 }
 
-export default function WorkoutExercises({ selectedExercises, handleSetsChange, handleRepsChange }: WorkoutExercisesProps) {
+export default function WorkoutExercises({ workoutExercises, handleSetsChange, handleRepsChange, handleDeletePress }: WorkoutExercisesProps) {
     const { t } = useTranslations();
-
+  
     return (
-        <View>
-            {selectedExercises.length > 0 && (
-                <View style={styles.table}>
-                    <View style={styles.tableHeader}>
-                        <Text style={styles.tableCell}>{t('exerciseName')}</Text>
-                        <Text style={styles.tableCell}>{t('sets')}</Text>
-                        <Text style={styles.tableCell}>{t('reps')}</Text>
-                    </View>
-                    {selectedExercises.map((exercise, index) => (
-                        <View key={index} style={styles.tableRow}>
-                            <Text style={styles.tableCell}>{exercise.exercise_name}</Text>
-                            <TextInput
-                                style={styles.tableInput}
-                                value={exercise.sets}
-                                onChangeText={(text) => handleSetsChange(index, text)}
-                                keyboardType="numeric"
-                            />
-                            <TextInput
-                                style={styles.tableInput}
-                                value={exercise.reps}
-                                onChangeText={(text) => handleRepsChange(index, text)}
-                                keyboardType="numeric"
-                            />
-                        </View>
-                    ))}
-                </View>
-            )}
-        </View>
-    )
-}
+      <View>
+        {workoutExercises.length > 0 && (
+          <DataTable style={styles.table}>
+            <DataTable.Header>
+              <DataTable.Title>{t('exercises')}</DataTable.Title>
+              <DataTable.Title numeric>{t('sets')}</DataTable.Title>
+              <DataTable.Title numeric>{t('reps')}</DataTable.Title>
+              <DataTable.Title numeric>{t('tableAction')}</DataTable.Title>
+            </DataTable.Header>
+            {workoutExercises.map((exercise, index) => (
+              <DataTable.Row key={exercise.ex_id}>
+                <DataTable.Cell>{exercise.exercise_name}</DataTable.Cell>
+                <DataTable.Cell style={styles.tableCell}>
+                  <TextInput
+                    value={exercise.sets}
+                    style={styles.tableInput}
+                    onChangeText={text => handleSetsChange(index, text)}
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell style={styles.tableCell}>
+                  <TextInput
+                    value={exercise.reps}
+                    style={styles.tableInput}
+                    underlineStyle={{ borderRadius: 40, borderColor: 'transparent' }}
+                    onChangeText={text => handleRepsChange(index, text)}
+                  />
+                </DataTable.Cell>
+                <DataTable.Cell numeric>
+                  <IconButton
+                    icon="delete"
+                    mode={"contained"}
+                    onPress={() => handleDeletePress(exercise)}
+                    style={styles.tableButton}
+                  />
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
+        )}
+      </View>
+    );
+  }
 
 const styles = StyleSheet.create({
     table: {
-        marginTop: 16,
+        marginBottom: 16,
     },
     tableHeader: {
         flexDirection: 'row',
@@ -62,14 +75,22 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
     },
     tableCell: {
-        flex: 1,
-        color: '#333',
-        textAlign: 'center',
+        marginTop: 3,
+        marginBottom: 3,
+        flexDirection: "column",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        height: 40,
     },
     tableInput: {
-        flex: 1,
-        textAlign: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        padding: 0,
+        textAlign: 'right',
+        fontSize: 16,
+        flexGrow: 0,
+        height: 30
+    },
+    tableButton: {
+        justifyContent: 'flex-end',
+        margin: 0,
     }
 });

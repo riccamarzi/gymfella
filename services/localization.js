@@ -15,6 +15,7 @@ const translations = {
         exerciseName: "Exercise",
         sets: "Sets",
         reps: "Reps",
+        tableAction: "Delete",
     },
     it: {
         home: "Home",
@@ -32,6 +33,7 @@ const translations = {
         exerciseName: "Esercizio",
         sets: "Serie",
         reps: "Ripetizioni",
+        tableAction: "Elimina",
     },
 };
 
