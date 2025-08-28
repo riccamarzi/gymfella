@@ -4,24 +4,18 @@ import { ThemedView } from "@/components/ThemedView";
 import { GestureHandlerRootView, Pressable } from "react-native-gesture-handler";
 import { StyleSheet, View, Text } from "react-native";
 import { useEffect, useState } from "react";
-import { useSQLiteContext } from "expo-sqlite";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { Colors } from "@/constants/Colors";
+import { db } from "@/database/drizzle-index";
+import { desc } from 'drizzle-orm';
 import { Link, Stack, useRouter } from "expo-router";
 import useTranslations from "@/hooks/useTranslations";
 import { FAB, Icon, useTheme } from 'react-native-paper';
+import { Workout } from "@/interfaces/Workout";
+import { workoutTable } from '@/database/schema';
 
-interface Workout {
-    id: number;
-    name: string;
-    date: string;
-}
 
 export default function WorkoutsScreen() {
     const [workouts, setWorkouts] = useState([] as Workout[]);
     const { t } = useTranslations();
-    const db = useSQLiteContext();
     const theme = useTheme();
     const router = useRouter();
 
@@ -31,15 +25,20 @@ export default function WorkoutsScreen() {
 
     useEffect(() => {
         async function getWorkouts() {
-            const query = await db.prepareAsync('SELECT workouts.id as id, workouts.name as name, workouts.start as date FROM workouts');
             try {
-                const result = await query.executeAsync();
+                const workouts = await db.select().from(workoutTable).orderBy(desc(workoutTable.start));
                 
-                const rows = await result.getAllAsync() as Workout[];
-                setWorkouts(rows);
+                const workoutData: Workout[] = workouts.map((record: any) => ({
+                    id: record.id,
+                    name: record.workout_name,
+                    date: new Date(record.start).toISOString() // Converti timestamp in string ISO
+                }));
+                console.log(workoutData);
                 
-            } finally {
-                await query.finalizeAsync();
+                setWorkouts(workoutData);
+                
+            } catch (error) {
+                console.error('Errore nel caricamento dei workouts:', error);
             }
         }
         getWorkouts();
@@ -52,10 +51,19 @@ export default function WorkoutsScreen() {
                 <ThemedView style={styles.container}>
                 {workouts.length > 0 ? (
                     <View style={styles.workouts}>
-                        {workouts.map((workout) => (
-                            <ThemedView key={workout.id}>
+                         {workouts.map((workout) => (
+                    //         <ThemedView key={workout.id}>
+                    //             <ThemedText>{workout.name}</ThemedText>
+                    //         </ThemedView>
+                            <Link
+                                href={{
+                                    pathname: "/(tabs)/workouts/get/[id]",
+                                    params: { id: workout.id }
+                                }}
+                                key={workout.id}
+                            >
                                 <ThemedText>{workout.name}</ThemedText>
-                            </ThemedView>
+                            </Link>
                         ))}
                     </View>
                 ) : (
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
     },
     fab: {
-        borderRadius: 30, // Assicura che il Pressable sia circolare
+        borderRadius: 30,
     },
     fabText: {
         fontSize: 24,

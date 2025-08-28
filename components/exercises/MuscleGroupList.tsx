@@ -1,7 +1,9 @@
-import { useSQLiteContext } from 'expo-sqlite';
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Pressable, Text, StyleSheet } from 'react-native';
 import { getExercisesByMuscleGroup } from '@/services/database';
+import { db } from '@/database/drizzle-index';
+import { eq } from 'drizzle-orm';
+import { muscleGroupTable, muscleGroupTranslationsTable } from '@/database/schema';
 import { Exercise } from '@/interfaces/Exercise';
 import ExerciseList from './ExerciseList';
 import { Collapsible } from '@/components/exercises/Collapsible';
@@ -15,14 +17,13 @@ interface MuscleGroupListProps {
 
 interface MuscleGroup {
     name: string;
-    id: number;
+    id: string; // WatermelonDB usa string per gli ID
 }
 
 const MuscleGroupList: React.FC<MuscleGroupListProps> = ({ locale, showCheckbox = false, onExerciseSelection }) => {
   const [muscleGroups, setMuscleGroups] = useState([] as MuscleGroup[]);
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup | null>(null);
-  const [exercises, setExercises] = useState<{ [key: number]: Exercise[] }>({});
-  const db = useSQLiteContext();
+  const [exercises, setExercises] = useState<{ [key: string]: Exercise[] }>({});
   const theme = useTheme();
 
   const styles = StyleSheet.create({
@@ -47,34 +48,48 @@ const MuscleGroupList: React.FC<MuscleGroupListProps> = ({ locale, showCheckbox 
 
   useEffect(() => {
     async function getMuscleGroups() {
-        const query = await db.prepareAsync(
-        'SELECT muscle_group_id AS id, muscle_translation AS name FROM muscle_group_translations WHERE locale = $locale');
-        try {
-            const result = await query.executeAsync({ $locale: locale });
-            const rows = await result.getAllAsync() as MuscleGroup[];
-            setMuscleGroups(rows);
-            setSelectedGroup(rows[0]);
-
-            const exercisesPromises = rows.map((group) =>
-                getExercisesByMuscleGroup(locale, db, group.id).then((rows) => ({
-                    groupId: group.id,
-                    exercises: rows
-                }))
-            );
-
-            const exercisesResults = await Promise.all(exercisesPromises);
-            const exercisesMap = exercisesResults.reduce((acc: { [key: number]: Exercise[] }, { groupId, exercises }) => {
-                acc[groupId] = exercises;
-                return acc;
-            }, {});
-
-            setExercises(exercisesMap);
-        } finally {
-            await query.finalizeAsync();
+        // Ottieni i gruppi muscolari con traduzioni da Drizzle
+        const muscleGroupTranslations = await db
+          .select({
+            id: muscleGroupTable.id,
+            name: muscleGroupTranslationsTable.muscle_translation
+          })
+          .from(muscleGroupTable)
+          .innerJoin(
+            muscleGroupTranslationsTable,
+            eq(muscleGroupTable.id, muscleGroupTranslationsTable.muscle_group_id)
+          )
+          .where(eq(muscleGroupTranslationsTable.locale, locale));
+        
+        const groups: MuscleGroup[] = muscleGroupTranslations.map(translation => ({
+          id: translation.id,
+          name: translation.name
+        }));
+        
+        setMuscleGroups(groups);
+        if (groups.length > 0) {
+          setSelectedGroup(groups[0]);
         }
+
+        // Ottieni gli esercizi per ogni gruppo
+        const exercisesPromises = groups.map(async (group) => {
+          const exercises = await getExercisesByMuscleGroup(locale, group.id);
+          return {
+            groupId: group.id,
+            exercises: exercises
+          };
+        });
+
+        const exercisesResults = await Promise.all(exercisesPromises);
+        const exercisesMap = exercisesResults.reduce((acc: { [key: string]: Exercise[] }, { groupId, exercises }) => {
+            acc[groupId] = exercises;
+            return acc;
+        }, {});
+
+        setExercises(exercisesMap);
     }
     getMuscleGroups();
-  }, [locale, db]);
+  }, [locale]);
 
   const handleExercisePress = (item: MuscleGroup) => {
     setSelectedGroup(item);

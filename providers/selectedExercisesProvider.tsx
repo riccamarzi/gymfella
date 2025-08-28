@@ -1,9 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-
-interface Exercise {
-  ex_id: number;
-  exercise_name: string;
-}
+import { Exercise } from '@/interfaces/Exercise';
 
 interface SelectedExercisesContextProps {
   selectedExercises: Exercise[];

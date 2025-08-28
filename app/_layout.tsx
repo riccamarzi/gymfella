@@ -6,10 +6,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { SQLiteProvider } from 'expo-sqlite';
 import { Provider as PaperProvider, MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperDefaultTheme, adaptNavigationTheme } from 'react-native-paper';
 import merge from 'deepmerge';
 import { SelectedExercisesProvider } from '@/providers/selectedExercisesProvider';
+import { initializeDatabase } from '@/database/drizzle-index';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -62,6 +62,11 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    // Inizializza il database Drizzle
+    initializeDatabase();
+  }, []);
+
   if (!loaded) {
     return null;
   }
@@ -72,15 +77,12 @@ export default function RootLayout() {
   return (
     <PaperProvider theme={theme}>
       <ThemeProvider value={theme}>
-
-        <SQLiteProvider databaseName="gym.db" assetSource={{ assetId: require("../assets/gymApp.db") }}>
-          <SelectedExercisesProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-          </SelectedExercisesProvider>
-        </SQLiteProvider>
+        <SelectedExercisesProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </SelectedExercisesProvider>
         <StatusBar style={colorScheme === "dark" ? "light" : "dark"}/>
       </ThemeProvider>
     </PaperProvider>

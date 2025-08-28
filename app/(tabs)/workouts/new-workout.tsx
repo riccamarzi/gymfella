@@ -11,6 +11,7 @@ import { ThemeProp } from "react-native-paper/lib/typescript/types";
 import WorkoutExercises from "@/components/exercises/WorkoutExercises";
 import { WorkoutExercise } from "@/interfaces/WorkoutExercise";
 import { useSelectedExercises } from "@/providers/selectedExercisesProvider";
+import { addNewWorkout, addWorkoutExercise, getLastWorkout } from "@/services/database";
 
 export default function NewWorkout() {
     const { t } = useTranslations();
@@ -36,8 +37,15 @@ export default function NewWorkout() {
       setWorkoutExercises(newWorkoutExercises);
     }, [selectedExercises]);
   
-    const handleSave = () => {
-      console.log(workoutExercises);
+    const handleSave = async () => {
+      try {
+        const workoutId = await addNewWorkout(name, startDate, duration);
+        for (const exercise of workoutExercises) {
+            await addWorkoutExercise(workoutId.toString(), exercise);
+        }
+      } catch (error) {
+        console.error('Error saving workout:', error);
+      }
     };
     
     const onDateChange = (event: DateTimePickerEvent, selectedDate: Date | undefined) => {
